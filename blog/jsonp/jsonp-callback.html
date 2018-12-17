@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="get()">jsonp</button>
+  <div></div>
+  <script >
+    /**
+     * @param return function()
+     */
+    function idPlus(){
+      var id = 0;
+      return function(){
+        return id++;
+      }
+    }
+    var id = idPlus();
+
+    var url = 'http://127.0.0.1:3000/jsonp/'+(id());
+    function jsonp(url, jsonpCallback, success){
+      url = ""+url+"?callback="+jsonpCallback;
+      var script = document.createElement('script');
+      script.src = url;
+      script.className="jsonp-script"
+      window[jsonpCallback] = function(data){
+        success && success(data)
+      }
+      document.body.appendChild(script);
+    }
+
+    function get(){
+      jsonp('http://127.0.0.1:3000/jsonp/'+id(), 
+        'callback', 
+        function(value){
+          document.getElementsByTagName('div')[0].innerHTML = value;
+        })
+    }
+
+    </script>
+</body>
+</html>

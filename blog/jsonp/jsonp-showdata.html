@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="get()">jsonp</button>
+  <div></div>
+  <div id='id' style="border:1px solid red"></div>
+  <script >
+    function idPlus(){
+      var id = 0;
+      return function(){
+        return id++;
+      }
+    }
+    var id = idPlus();
+    function getId(){
+      document.getElementById('id').innerHTML = id();
+    }
+    var url = 'http://127.0.0.1:3000/jsonp/'+(id())+'?callback=showData';
+    function jsonp(url, jsonpCallback, success){
+      var script = document.createElement('script');
+      url = 'http://127.0.0.1:3000/jsonp/'+(id())+'?callback=showData';
+      script.src = url;
+      script.className="jsonp-script"
+      // script.type= 'text/json';
+      // script.async = true;
+      // console.log(script instanceof Node)
+      // window[jsonpCallback] = function(data){
+      //   success && success(data)
+      // }
+      document.body.appendChild(script);
+    }
+
+    function showData(id){
+      document.getElementsByTagName('div')[0].innerHTML = id;
+      document.getElementsByClassName('jsonp-script')[0].parentElement.removeChild(document.getElementsByClassName('jsonp-script')[0])
+    }
+
+    function get(){
+      jsonp(url, 'callback', 
+      function(value){
+        console.log(value)
+        document.getElementsByTagName('div')[0].innerHTML = value;
+      })
+      // callback();
+    }
+
+    </script>
+</body>
+</html>

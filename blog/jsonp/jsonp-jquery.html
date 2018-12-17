@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="get()">jsonp</button>
+  <button onclick="get2()">jsonp2</button>
+  <div></div>
+  <div id='id' style="border:1px solid red"></div>
+  <script src="../../lib/jquery.js"></script>
+  <script>
+    function idPlus() {
+      var id = 0;
+      return function () {
+        return id++;
+      }
+    }
+    var id = idPlus();
+
+    var url = 'http://127.0.0.1:3000/jsonp/' + (id());
+
+    function showData(data) {
+      console.log("showData"+data);
+      document.getElementsByTagName('div')[0].innerHTML = data;
+      // document.getElementsByClassName('jsonp-script')[0].parentElement.removeChild(document.getElementsByClassName('jsonp-script')[0])
+    }
+
+    function get() {
+      $.ajax(
+        {
+          url: url,
+          type: "GET",
+          dataType: "jsonp",  //指定服务器返回的数据类型
+          // jsonpCallback: "showData",  //指定回调函数名称
+          success: function (data) {
+            console.info("调用success");
+          }
+        }
+      )
+    }
+    function get2() {
+      $.ajax(
+        {
+          url: url,
+          type: "GET",
+          dataType: "jsonp",  //指定服务器返回的数据类型
+          jsonpCallback: "showData",  //指定回调函数名称
+          success: function (data) {
+            console.info("调用success");
+          }
+        }
+      )
+    }
+
+  </script>
+</body>
+
+</html>
